@@ -1,9 +1,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"strings"
+
+	fileutils "github.com/alessiosavi/GoGPUtils/files"
+	stringutils "github.com/alessiosavi/GoGPUtils/string"
 
 	"github.com/buger/jsonparser"
 )
@@ -21,12 +25,13 @@ func main() {
 		err      error
 	)
 
+	jN, cN, oN := inputParameter()
 	//Json that have to be loaded as template
-	if j, err = ioutil.ReadFile("conf/data.json"); err != nil {
+	if j, err = ioutil.ReadFile(jN); err != nil {
 		panic("unable to find the file with json data")
 	}
 	// key of json that have to be modified
-	if c, err := ioutil.ReadFile("conf/conf.ini"); err == nil {
+	if c, err := ioutil.ReadFile(cN); err == nil {
 		// Save the list of the key:value related to the data that have to be substitute
 		t := strings.Split(string(c), "\n")
 		conf = make([]configuration, len(t))
@@ -52,7 +57,7 @@ func main() {
 				if k, err := jsonparser.Set(jsonDataModifed[j], []byte("\""+s+"\""), strings.Split(conf[i].path, ".")...); err == nil {
 					jsonDataModifed = append(jsonDataModifed, k)
 					//fmt.Println(string(k))
-					if err := ioutil.WriteFile(fmt.Sprintf("./generated/%d", fileName), k, 0644); err != nil {
+					if err := ioutil.WriteFile(fmt.Sprintf("%s/%d", oN, fileName), k, 0644); err != nil {
 						fmt.Println("Error: ", err)
 					}
 					fileName++
@@ -62,4 +67,28 @@ func main() {
 			}
 		}
 	}
+}
+
+func inputParameter() (string, string, string) {
+	j := flag.String("json", "./conf/data.json", "The path related to the input json to create")
+	c := flag.String("conf", "./conf/conf.ini", "The path related to the input configuration")
+	o := flag.String("output", "./generated", "The path related to the input json to create")
+
+	flag.Parse()
+
+	if stringutils.IsBlank(*j) || !fileutils.IsFile(*j) {
+		panic("json file not passed in configuration")
+	}
+	if stringutils.IsBlank(*c) || !fileutils.IsFile(*c) {
+		panic("configuration file not passed in configuration")
+	}
+
+	if stringutils.IsBlank(*o) {
+		panic("output dir not valid")
+	}
+	if !fileutils.IsDir(*o) {
+		fileutils.CreateDir(*o)
+	}
+
+	return *j, *c, *o
 }
