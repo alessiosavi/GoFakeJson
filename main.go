@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
+	"os"
 	"strings"
 
 	fileutils "github.com/alessiosavi/GoGPUtils/files"
@@ -56,9 +60,8 @@ func main() {
 			for _, s := range conf[i].value {
 				if k, err := jsonparser.Set(jsonDataModifed[j], []byte("\""+s+"\""), strings.Split(conf[i].path, ".")...); err == nil {
 					jsonDataModifed = append(jsonDataModifed, k)
-					//fmt.Println(string(k))
 					if err := ioutil.WriteFile(fmt.Sprintf("%s/%d", oN, fileName), k, 0644); err != nil {
-						fmt.Println("Error: ", err)
+						panic("Error: " + err.Error())
 					}
 					fileName++
 				} else {
@@ -67,7 +70,86 @@ func main() {
 			}
 		}
 	}
+
+	// Remove files that are equals
+	filesList := fileutils.ListFile("./generated")
+	var toRemove []string
+	for i := 0; i < len(filesList); i++ {
+		for j := i + 1; j < len(filesList); j++ {
+			if deepCompare(filesList[i], filesList[j]) {
+				toRemove = append(toRemove, filesList[i])
+				break
+			}
+		}
+	}
+	for i := range toRemove {
+		deleteFile(toRemove[i])
+	}
+	fmt.Println("Found equals files: ", toRemove)
+
 }
+
+func deepCompare(file1, file2 string) bool {
+	if !fileutils.FileExists(file1) {
+		log.Fatal("File [", file1, "] does not exist!")
+	}
+
+	if !fileutils.FileExists(file2) {
+		log.Fatal("File [", file2, "] does not exist!")
+	}
+
+	var size1, size2 int64
+	var err error
+	// Get file size of file1
+	size1, err = fileutils.GetFileSize(file1)
+	if err != nil {
+		log.Fatal("Unable to read file [" + file1 + "]")
+	}
+
+	// Get file size of file2
+	size2, err = fileutils.GetFileSize(file2)
+	if err != nil {
+		log.Fatal("Unable to read file [" + file2 + "]")
+	}
+
+	if size1 != size2 {
+		return false
+	}
+
+	f1, err := os.Open(file1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f1.Close()
+
+	f2, err := os.Open(file2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f2.Close()
+	b1 := make([]byte, chunkSize)
+	b2 := make([]byte, chunkSize)
+	for {
+		_, err1 := f1.Read(b1)
+		_, err2 := f2.Read(b2)
+		if err1 != nil || err2 != nil {
+			if err1 == io.EOF && err2 == io.EOF {
+				fmt.Printf("Files equals: %s - %s\n", file1, file2)
+				return true
+			} else if err1 == io.EOF || err2 == io.EOF {
+				return false
+			} else {
+				log.Fatal(err1, err2)
+			}
+		}
+
+		if !bytes.Equal(b1, b2) {
+			return false
+		}
+	}
+}
+
+const chunkSize = 1024
 
 func inputParameter() (string, string, string) {
 	j := flag.String("json", "./conf/data.json", "The path related to the input json to create")
@@ -91,4 +173,19 @@ func inputParameter() (string, string, string) {
 	}
 
 	return *j, *c, *o
+}
+
+func deleteFile(path string) {
+	var err = os.Remove(path)
+	if isError(err) {
+		return
+	}
+}
+
+func isError(err error) bool {
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return (err != nil)
 }
