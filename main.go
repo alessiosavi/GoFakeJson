@@ -100,6 +100,7 @@ func deepCompare(file1, file2 string) bool {
 
 	var size1, size2 int64
 	var err error
+	var f1, f2 *os.File
 	// Get file size of file1
 	size1, err = fileutils.GetFileSize(file1)
 	if err != nil {
@@ -116,17 +117,16 @@ func deepCompare(file1, file2 string) bool {
 		return false
 	}
 
-	f1, err := os.Open(file1)
-	if err != nil {
+	if f1, err = os.Open(file1); err != nil {
 		log.Fatal(err)
 	}
 	defer f1.Close()
 
-	f2, err := os.Open(file2)
-	if err != nil {
+	if f2, err = os.Open(file2); err != nil {
 		log.Fatal(err)
 	}
 	defer f2.Close()
+
 	b1 := make([]byte, chunkSize)
 	b2 := make([]byte, chunkSize)
 	for {
@@ -169,7 +169,9 @@ func inputParameter() (string, string, string) {
 		panic("output dir not valid")
 	}
 	if !fileutils.IsDir(*o) {
-		fileutils.CreateDir(*o)
+		if err := fileutils.CreateDir(*o); err != nil {
+			panic("Error creating dir [*o]: " + err.Error())
+		}
 	}
 
 	return *j, *c, *o
