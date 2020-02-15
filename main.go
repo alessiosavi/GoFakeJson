@@ -60,7 +60,7 @@ func main() {
 			for _, s := range conf[i].value {
 				if k, err := jsonparser.Set(jsonDataModifed[j], []byte("\""+s+"\""), strings.Split(conf[i].path, ".")...); err == nil {
 					jsonDataModifed = append(jsonDataModifed, k)
-					if err := ioutil.WriteFile(fmt.Sprintf("%s/%d", oN, fileName), k, 0644); err != nil {
+					if err := ioutil.WriteFile(fmt.Sprintf("%s/%d.json", oN, fileName), k, 0644); err != nil {
 						panic("Error: " + err.Error())
 					}
 					fileName++
@@ -72,7 +72,7 @@ func main() {
 	}
 
 	// Remove files that are equals
-	filesList := fileutils.ListFile("./generated")
+	filesList := fileutils.ListFile(oN)
 	var toRemove []string
 	for i := 0; i < len(filesList); i++ {
 		for j := i + 1; j < len(filesList); j++ {
@@ -86,7 +86,6 @@ func main() {
 		deleteFile(toRemove[i])
 	}
 	fmt.Println("Found equals files: ", toRemove)
-
 }
 
 func deepCompare(file1, file2 string) bool {
@@ -134,7 +133,6 @@ func deepCompare(file1, file2 string) bool {
 		_, err2 := f2.Read(b2)
 		if err1 != nil || err2 != nil {
 			if err1 == io.EOF && err2 == io.EOF {
-				fmt.Printf("Files equals: %s - %s\n", file1, file2)
 				return true
 			} else if err1 == io.EOF || err2 == io.EOF {
 				return false
@@ -142,7 +140,6 @@ func deepCompare(file1, file2 string) bool {
 				log.Fatal(err1, err2)
 			}
 		}
-
 		if !bytes.Equal(b1, b2) {
 			return false
 		}
@@ -173,7 +170,6 @@ func inputParameter() (string, string, string) {
 			panic("Error creating dir [*o]: " + err.Error())
 		}
 	}
-
 	return *j, *c, *o
 }
 
@@ -188,6 +184,5 @@ func isError(err error) bool {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-
 	return (err != nil)
 }
