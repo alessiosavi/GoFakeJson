@@ -4,6 +4,8 @@ github.com/alessiosavi/GoGPUtils v0.0.26 h1:bFdo9SlH+ijKKkRTG8VwhlkctnME5crnnBDp
 github.com/alessiosavi/GoGPUtils v0.0.26/go.mod h1:DRI9kEkT/ZZdHr+ESFOMfqWPHsO9WgjzyVXdfOGN83M=
 github.com/alessiosavi/GoGPUtils v0.0.27 h1:KOL1Ca45uRb43vjp+vh2IXBLW3HP/QxFy5GiA+RotBU=
 github.com/alessiosavi/GoGPUtils v0.0.27/go.mod h1:DRI9kEkT/ZZdHr+ESFOMfqWPHsO9WgjzyVXdfOGN83M=
+github.com/alessiosavi/GoGPUtils v0.0.30 h1:+by+u5WlrjCvY3wdcn5aOGBJ2depT1iiNQwD6JlqZfY=
+github.com/alessiosavi/GoGPUtils v0.0.30/go.mod h1:DRI9kEkT/ZZdHr+ESFOMfqWPHsO9WgjzyVXdfOGN83M=
 github.com/alessiosavi/ahocorasick v0.0.3/go.mod h1:GlX7JXZTgFoEccsMg5JZVpjoe+NW7Nk+3b5ldtGP5oU=
 github.com/buger/jsonparser v0.0.0-20191204142016-1a29609e0929 h1:MW/JDk68Rny52yI0M0N+P8lySNgB+NhpI/uAmhgOhUM=
 github.com/buger/jsonparser v0.0.0-20191204142016-1a29609e0929/go.mod h1:tgcrVJ81GPSF0mz+0nu1Xaz0fazGPrmmJfJtxjbHhUQ=
