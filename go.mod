@@ -3,6 +3,6 @@ module GoFakeJson
 go 1.13
 
 require (
-	github.com/alessiosavi/GoGPUtils v0.0.30
+	github.com/alessiosavi/GoGPUtils v0.0.42
 	github.com/buger/jsonparser v0.0.0-20191204142016-1a29609e0929
 )
