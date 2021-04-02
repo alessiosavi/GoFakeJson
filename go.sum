@@ -8,6 +8,8 @@ github.com/alessiosavi/GoGPUtils v0.0.30 h1:+by+u5WlrjCvY3wdcn5aOGBJ2depT1iiNQwD
 github.com/alessiosavi/GoGPUtils v0.0.30/go.mod h1:DRI9kEkT/ZZdHr+ESFOMfqWPHsO9WgjzyVXdfOGN83M=
 github.com/alessiosavi/GoGPUtils v0.0.50 h1:qWfjxYHFIPgtCmyq5C0a361s/Ks8//VFKWfwsPiJttQ=
 github.com/alessiosavi/GoGPUtils v0.0.50/go.mod h1:1sBg2y71oZfOLMAsJmArxfUQa3QGZBZ8pu3P3n6JR4M=
+github.com/alessiosavi/GoGPUtils v0.0.51 h1:JjfrXoTKUTfGP3fucZ+PLdUvGA6dC91BNGbPc99y0EY=
+github.com/alessiosavi/GoGPUtils v0.0.51/go.mod h1:ItV2iMAIsIvppzk30gVwjgCE0RRXmVtI3AIPjI5h08I=
 github.com/alessiosavi/ahocorasick v0.0.3/go.mod h1:GlX7JXZTgFoEccsMg5JZVpjoe+NW7Nk+3b5ldtGP5oU=
 github.com/aws/aws-sdk-go-v2 v1.2.1/go.mod h1:hTQc/9pYq5bfFACIUY9tc/2SYWd9Vnmw+testmuQeRY=
 github.com/aws/aws-sdk-go-v2 v1.3.0/go.mod h1:hTQc/9pYq5bfFACIUY9tc/2SYWd9Vnmw+testmuQeRY=
@@ -21,6 +23,7 @@ github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.0.3/go.mod h1:C50
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.1.1/go.mod h1:B+fb+BFbja6obFOHYmYE4iUMdej9aM2VGSpgdU1pn0M=
 github.com/aws/aws-sdk-go-v2/service/lambda v1.1.2/go.mod h1:+VGeaIpjijz/BfgOYFORiXQ09YU63raqpMgUmnI/TTk=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.2.1/go.mod h1:3xGOyhtPPD/WXJUljmb5+ZXhNyHa4h6wgL6mWOF6S0c=
+github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.2.0/go.mod h1:24WsZt3WUg4VTGgsYzF0cqXeTdPBIHsmBpVx7+dsznI=
 github.com/aws/aws-sdk-go-v2/service/sso v1.1.2/go.mod h1:5yU1oE3+CVYYLUsaHt2AVU3CJJZ6ER4pwsrRD1L2KSc=
 github.com/aws/aws-sdk-go-v2/service/sts v1.1.2/go.mod h1:zu7rotIY9P4Aoc6ytqLP9jeYrECDHUODB5Gbp+BSHl8=
 github.com/aws/smithy-go v1.2.0/go.mod h1:SObp3lf9smib00L/v3U2eAKG8FyQ7iLrJnQiAmR5n+E=
