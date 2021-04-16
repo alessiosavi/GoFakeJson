@@ -41,9 +41,9 @@ func main() {
 		conf = make([]configuration, len(t))
 		for i := range t {
 			if strings.Contains(t[i], "=") {
-				confData = strings.Split(string(t[i]), "=")
+				confData = strings.Split(t[i], "=")
 				conf[i].path = confData[0]
-				conf[i].value = strings.Split(confData[1], ",")
+				conf[i].value = strings.Split(strings.ReplaceAll(confData[1], "\r", ""), ",")
 			} else {
 				panic("not a valid key=value(s)")
 			}
@@ -72,7 +72,10 @@ func main() {
 	}
 
 	// Remove files that are equals
-	filesList := fileutils.ListFile(oN)
+	filesList, err := fileutils.ListFile(oN)
+	if err != nil {
+		panic(err)
+	}
 	var toRemove []string
 	for i := 0; i < len(filesList); i++ {
 		for j := i + 1; j < len(filesList); j++ {
@@ -149,9 +152,9 @@ func deepCompare(file1, file2 string) bool {
 const chunkSize = 1024
 
 func inputParameter() (string, string, string) {
-	j := flag.String("json", "./conf/data.json", "The path related to the input json to create")
-	c := flag.String("conf", "./conf/conf.ini", "The path related to the input configuration")
-	o := flag.String("output", "./generated", "The path related to the input json to create")
+	j := flag.String("json", "conf/data.json", "The path related to the input json to create")
+	c := flag.String("conf", "conf/conf.txt", "The path related to the input configuration")
+	o := flag.String("output", "generated", "The path related to the input json to create")
 
 	flag.Parse()
 
