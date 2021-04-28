@@ -10,6 +10,8 @@ github.com/alessiosavi/GoGPUtils v0.0.50 h1:qWfjxYHFIPgtCmyq5C0a361s/Ks8//VFKWfw
 github.com/alessiosavi/GoGPUtils v0.0.50/go.mod h1:1sBg2y71oZfOLMAsJmArxfUQa3QGZBZ8pu3P3n6JR4M=
 github.com/alessiosavi/GoGPUtils v0.0.51 h1:JjfrXoTKUTfGP3fucZ+PLdUvGA6dC91BNGbPc99y0EY=
 github.com/alessiosavi/GoGPUtils v0.0.51/go.mod h1:ItV2iMAIsIvppzk30gVwjgCE0RRXmVtI3AIPjI5h08I=
+github.com/alessiosavi/GoGPUtils v0.0.52 h1:OkJVtkYafUjg/d0ZTIKwd1rdVPf4eMODdN0HSG4SU4Y=
+github.com/alessiosavi/GoGPUtils v0.0.52/go.mod h1:ItV2iMAIsIvppzk30gVwjgCE0RRXmVtI3AIPjI5h08I=
 github.com/alessiosavi/ahocorasick v0.0.3/go.mod h1:GlX7JXZTgFoEccsMg5JZVpjoe+NW7Nk+3b5ldtGP5oU=
 github.com/aws/aws-sdk-go-v2 v1.2.1/go.mod h1:hTQc/9pYq5bfFACIUY9tc/2SYWd9Vnmw+testmuQeRY=
 github.com/aws/aws-sdk-go-v2 v1.3.0/go.mod h1:hTQc/9pYq5bfFACIUY9tc/2SYWd9Vnmw+testmuQeRY=
