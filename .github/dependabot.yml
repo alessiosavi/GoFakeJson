@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: github.com/alessiosavi/GoGPUtils
+    versions:
+    - 0.0.34
+    - 0.0.36
+    - 0.0.39
+    - 0.0.42
+    - 0.0.45
+    - 0.0.47
+    - 0.0.51
