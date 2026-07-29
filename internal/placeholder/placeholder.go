@@ -53,6 +53,14 @@ func (e *Engine) Resolve(s string) (any, error) {
 
 func (e *Engine) resolveOne(expr string) (any, error) {
 	parts := strings.Split(expr, ":")
+	// Zero-argument generators must not receive stray arguments.
+	switch parts[0] {
+	case "name", "firstname", "lastname", "email", "username", "uuid",
+		"bool", "word", "ipv4", "date", "timestamp":
+		if len(parts) != 1 {
+			return nil, fmt.Errorf("placeholder: %s takes no arguments, got %q", parts[0], expr)
+		}
+	}
 	switch parts[0] {
 	case "name":
 		return e.f.Name(), nil

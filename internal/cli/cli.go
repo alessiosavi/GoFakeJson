@@ -70,10 +70,12 @@ func generateCmd(args []string, stdout, stderr io.Writer) int {
 	pretty := fs.Bool("pretty", false, "pretty-print output")
 	outDir := fs.String("o", "", "output directory (default: stdout)")
 	toStdout := fs.Bool("stdout", false, "write JSON Lines to stdout")
-	fs.Usage = func() { fmt.Fprint(stderr, usage) }
+	// The flag package calls fs.Usage on -h and on parse errors; printing to
+	// stdout here keeps -h output in one place. Parse errors print their
+	// one-line message to stderr via fs.SetOutput above.
+	fs.Usage = func() { fmt.Fprint(stdout, usage) }
 	if err := fs.Parse(args); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			fmt.Fprint(stdout, usage)
 			return 0
 		}
 		return 1

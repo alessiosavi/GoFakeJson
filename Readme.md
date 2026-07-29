@@ -27,12 +27,14 @@ gofakejson generate -t template.json [-c conf.txt] [-n N] [-seed S] [-pretty] [-
 - `-seed` random seed for reproducible output (default: random)
 - `-pretty` pretty-print JSON
 - `-o` output directory (`0001.json`, `0002.json`, ...); without it, JSON Lines go to stdout
+- `-stdout` write JSON Lines to stdout (the default when `-o` is not given); mutually exclusive with `-o`
 
 ## Conf format
 
 One override per line: `path.to.[0].key=value1,value2`
 
 - Nested keys are dot-separated; array elements are `[index]`.
+- Path and values are split at the **first** `=`, so values may contain `=`.
 - Values are split on commas (`\,` escapes a literal comma).
 - Values that parse as JSON literals keep their type: `42` → number,
   `true` → boolean, `null` → null, `"quoted"` → string.
@@ -74,5 +76,7 @@ gofakejson generate -t user-template.json -n 100 -seed 1 | jq .
 - Output on stdout is newline-delimited JSON — safe to pipe to `jq`, files, or
   another tool.
 - All diagnostics (including the `generated N document(s)` summary) go to stderr.
+- Duplicates are skipped (SHA-256 dedup of the rendered JSON), so random mode
+  can emit fewer than `-n` documents if the rendered documents are identical.
 - Exit code is 0 on success, 1 on any error.
 - Use `-seed` when you need reproducible data; omit it for fresh data each run.

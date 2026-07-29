@@ -1,6 +1,7 @@
 package placeholder
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -121,5 +122,60 @@ func TestResolveDoc(t *testing.T) {
 	nested := doc["nested"].(map[string]any)
 	if !strings.Contains(nested["email"].(string), "@") {
 		t.Fatalf("email looks wrong: %v", nested["email"])
+	}
+}
+
+func TestAllGeneratorsResolve(t *testing.T) {
+	generators := []struct {
+		expr     string
+		wantType any // nil means no type assertion
+	}{
+		{"{{name}}", nil},
+		{"{{firstname}}", nil},
+		{"{{lastname}}", nil},
+		{"{{email}}", nil},
+		{"{{username}}", nil},
+		{"{{uuid}}", nil},
+		{"{{int:1:100}}", int(0)},
+		{"{{float:0:1}}", float64(0)},
+		{"{{bool}}", false},
+		{"{{word}}", nil},
+		{"{{sentence:5}}", nil},
+		{"{{ipv4}}", nil},
+		{"{{date}}", nil},
+		{"{{timestamp}}", int64(0)},
+	}
+	for _, g := range generators {
+		t.Run(g.expr, func(t *testing.T) {
+			e := New(42)
+			v, err := e.Resolve(g.expr)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if s := fmt.Sprint(v); strings.Contains(s, "{{") {
+				t.Fatalf("unresolved placeholder in %q", s)
+			}
+			if g.wantType != nil {
+				if got, want := fmt.Sprintf("%T", v), fmt.Sprintf("%T", g.wantType); got != want {
+					t.Fatalf("got type %s, want %s", got, want)
+				}
+			}
+		})
+	}
+}
+
+func TestZeroArgGeneratorsRejectArguments(t *testing.T) {
+	zeroArg := []string{
+		"name", "firstname", "lastname", "email", "username", "uuid",
+		"bool", "word", "ipv4", "date", "timestamp",
+	}
+	for _, gen := range zeroArg {
+		e := New(42)
+		if _, err := e.Resolve("{{" + gen + ":extra}}"); err == nil {
+			t.Errorf("{{%s:extra}}: expected error, got nil", gen)
+		}
+		if _, err := e.Resolve("{{" + gen + "}}"); err != nil {
+			t.Errorf("{{%s}}: unexpected error: %v", gen, err)
+		}
 	}
 }
