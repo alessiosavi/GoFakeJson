@@ -142,14 +142,15 @@ func clone(v any) (any, error) {
 }
 
 // cartesian returns every tuple picking one element from each input list,
-// in input order. With no lists it returns one empty tuple.
+// in input order, with the first list varying fastest. With no lists it
+// returns one empty tuple.
 func cartesian(lists [][]string) [][]string {
 	out := [][]string{{}}
-	for _, list := range lists {
+	for i := len(lists) - 1; i >= 0; i-- {
 		var next [][]string
-		for _, prefix := range out {
-			for _, v := range list {
-				tuple := append(append([]string{}, prefix...), v)
+		for _, suffix := range out {
+			for _, v := range lists[i] {
+				tuple := append([]string{v}, suffix...)
 				next = append(next, tuple)
 			}
 		}
