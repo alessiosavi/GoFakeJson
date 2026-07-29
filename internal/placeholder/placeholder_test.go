@@ -1,6 +1,7 @@
 package placeholder
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
@@ -90,6 +91,46 @@ func TestDeterministicWithSeed(t *testing.T) {
 		}
 		if v1 != v2 {
 			t.Fatalf("same seed produced different values: %v vs %v", v1, v2)
+		}
+	}
+}
+
+// A document is resolved key-by-key against a single seeded PRNG, so the
+// traversal order decides which draw lands on which key. Go randomizes map
+// iteration, so this only stays stable if ResolveDoc sorts keys itself.
+func TestResolveDocDeterministicWithSeed(t *testing.T) {
+	newDoc := func() map[string]any {
+		return map[string]any{
+			"alpha":   "{{name}}",
+			"bravo":   "{{name}}",
+			"charlie": "{{name}}",
+			"delta":   "{{name}}",
+			"echo":    "{{name}}",
+			"nested": map[string]any{
+				"foxtrot": "{{name}}",
+				"golf":    "{{name}}",
+				"hotel":   "{{name}}",
+			},
+			"list": []any{"{{name}}", "{{name}}"},
+		}
+	}
+
+	var want string
+	for i := 0; i < 30; i++ {
+		doc := newDoc()
+		if err := New(7).ResolveDoc(doc); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		b, err := json.Marshal(doc)
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		if i == 0 {
+			want = string(b)
+			continue
+		}
+		if got := string(b); got != want {
+			t.Fatalf("seed 7 produced different documents across runs:\n run 0: %s\n run %d: %s", want, i, got)
 		}
 	}
 }

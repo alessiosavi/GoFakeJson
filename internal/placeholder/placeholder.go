@@ -7,6 +7,7 @@ package placeholder
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -131,11 +132,20 @@ func (e *Engine) resolveOne(expr string) (any, error) {
 }
 
 // ResolveDoc resolves placeholders in every string value of doc
-// (a decoded JSON tree) in place.
+// (a decoded JSON tree) in place. Object keys are visited in sorted order:
+// every resolution draws from the same seeded PRNG, so a stable traversal
+// order is what makes -seed reproducible for documents with more than one
+// placeholder.
 func (e *Engine) ResolveDoc(doc any) error {
 	switch d := doc.(type) {
 	case map[string]any:
-		for k, v := range d {
+		keys := make([]string, 0, len(d))
+		for k := range d {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			v := d[k]
 			if s, ok := v.(string); ok {
 				nv, err := e.Resolve(s)
 				if err != nil {
