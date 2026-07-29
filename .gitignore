@@ -2,7 +2,7 @@
 a.out
 generated/
 conf/
-GoFakeJson
+/gofakejson
 .idea/
 
 # Binaries for programs and plugins
