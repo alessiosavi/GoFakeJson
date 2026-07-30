@@ -1,8 +1,5 @@
-module GoFakeJson
+module github.com/alessiosavi/GoFakeJson
 
-go 1.13
+go 1.22
 
-require (
-	github.com/alessiosavi/GoGPUtils v0.0.51
-	github.com/buger/jsonparser v1.1.1
-)
+require github.com/brianvoe/gofakeit/v7 v7.15.0

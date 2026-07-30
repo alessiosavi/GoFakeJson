@@ -1,8 +1,6 @@
 .vscode/
 a.out
-generated/
-conf/
-GoFakeJson
+/gofakejson
 .idea/
 
 # Binaries for programs and plugins
@@ -20,3 +18,4 @@ GoFakeJson
 
 # Dependency directories (remove the comment below to include it)
 vendor/
+/generated/
